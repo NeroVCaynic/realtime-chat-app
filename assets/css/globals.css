@@ -7,5 +7,13 @@ html {
 }
 
 body {
-  @apply bg-white;
+  @apply bg-white dark:bg-gray-400;
+}
+
+.link {
+  @apply text-blue-400 dark:text-purple-400
+}
+
+.link__header {
+  @apply text-gray-400 dark:text-gray-100 text-base font-semibold;
 }
