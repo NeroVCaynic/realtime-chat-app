@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import { UserItems, ChatItems } from "@utils/loggedInLinks";
 import { 
     Navbar,
     NavbarMenu,
@@ -13,30 +14,30 @@ import {
     Button,
     Divider,
     Spacer,
+    useDisclosure,
 } from "@nextui-org/react";
-import ThemeSwitcher from "./ThemeSwitcher";
+import { AvatarRapper, AuthForm, ThemeSwitcher } from ".";
+import { useRouter } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 
-function Nav() {
+function Nav({ isSession }) {
+  const router = useRouter()
+  const supabase = createClientComponentClient();
   const [isMenuStatus, setIsMenuStatus] = useState(null);
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
-  const ChatItems = [
-    {name: 'Groups', link: "/groups"},
-    {name: 'Contacts', link: "/contacts"},
-    {name: 'Create & Add', link: "/create-add"},
-    {name: 'explore', link: "/explore"},
-  ];
+  async function handleUserLogout() {
+    await supabase.auth.signOut();
 
-  const UserItems = [
-    {name: 'Profile', link: "/profile"},
-    {name: 'Dashboard', link: "/dashboard"},
-    {name: 'My Settings', link: "/settings"},
-    {name: 'Terms of Service', link: "terms"},
-  ];
+    router.refresh();
+  }
 
   return (
     <div className="relative overflow-hidden">
-      <Navbar isBordered className="top-0" position="sticky" onMenuOpenChange={setIsMenuStatus}>
+      <AuthForm isOpen={isOpen} onOpenChange={onOpenChange} />
+
+      <Navbar isBordered className="top-0 bg-neutral-100 dark:bg-neutral-800" position="sticky" onMenuOpenChange={setIsMenuStatus}>
         <NavbarBrand>
           <Image className="relative left-5" src='./svg/logo.svg' alt="chat-logo" width={30} height={30}/>
           <span className="text-base text-gray-700 dark:text-white font-bold">ReactUp</span>
@@ -66,7 +67,13 @@ function Nav() {
           </NavbarItem>
 
           <NavbarItem className="hidden sm:block">
-            <Button color="primary">Sign Up</Button>
+            {
+              isSession ? (
+                <AvatarRapper />
+              ) : (
+                <Button onPress={onOpen} className="btn-theme">Sign Up</Button>
+              )
+            }
           </NavbarItem>
 
           <NavbarMenuToggle 
@@ -75,7 +82,10 @@ function Nav() {
           />
         </NavbarContent>
 
-        <NavbarMenu className="text-right sm:text-left">
+        <NavbarMenu className="bg-neutral-100 dark:bg-neutral-800 text-right sm:text-left">
+          <div className="flex sm:flex-row-reverse gap-4">
+            <ThemeSwitcher />
+          </div>
           <span className="link__header">Site</span>
           <Divider/>
           <NavbarMenuItem>
@@ -95,40 +105,48 @@ function Nav() {
           </NavbarMenuItem>
           <Spacer y={4} />
 
-          <span className="link__header">Chat</span>
-          <Divider/>
           {
-            ChatItems?.length > 0 ? (
-              ChatItems.map((item, index)=>{
-                return (
-                <NavbarMenuItem key={`${item.name}--${index}`}>
-                  <Link className="link" href={item.link}>{item.name}</Link>
-                </NavbarMenuItem>
+            isSession ? (
+              <>
+              <span className="link__header">Chat</span>
+              <Divider/>
+              {
+                ChatItems?.length > 0 ? (
+                  ChatItems.map((item, index)=>{
+                    return (
+                    <NavbarMenuItem key={`${item.name}--${index}`}>
+                      <Link className="link" href={item.link}>{item.name}</Link>
+                    </NavbarMenuItem>
+                    )
+                  })
+                ) : (
+                  null
                 )
-              })
+              }
+              <Spacer y={4} />
+
+              <span className="link__header">User</span>
+              <Divider/>
+              {
+                UserItems?.length > 0 ? (
+                  UserItems.map((item, index)=>{
+                    return (
+                    <NavbarMenuItem key={`${item.name}--${index}`}>
+                      <Link className="link" href={item.link}>{item.name}</Link>
+                    </NavbarMenuItem>
+                    )
+                  })
+                ) : (
+                  null
+                )
+              }
+
+              <Button onClick={handleUserLogout} color="danger">Logout</Button>
+              </>
             ) : (
-              null
+              <Button onPress={onOpen} className="btn-theme">Sign Up</Button>
             )
           }
-          <Spacer y={4} />
-
-          <span className="link__header">User</span>
-          <Divider/>
-          {
-            UserItems?.length > 0 ? (
-              UserItems.map((item, index)=>{
-                return (
-                <NavbarMenuItem key={`${item.name}--${index}`}>
-                  <Link className="link" href={item.link}>{item.name}</Link>
-                </NavbarMenuItem>
-                )
-              })
-            ) : (
-              null
-            )
-          }
-
-          <Button color="danger">Logout</Button>
         </NavbarMenu>
       </Navbar>
     </div>

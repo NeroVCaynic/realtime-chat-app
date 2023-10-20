@@ -1,8 +1,7 @@
 "use client";
 
 import { Switch } from "@nextui-org/react";
-import { SunIcon } from "./sunIcon";
-import { MoonIcon } from "./moonIcon";
+import { SunIcon, MoonIcon } from "@assets/icons";
 import {useTheme} from "next-themes";
 
 function ThemeSwitcher() {
@@ -26,7 +25,7 @@ function ThemeSwitcher() {
     return (
         <div>
             <Switch
-            defaultSelected
+            isSelected={theme === 'light' ? true : false}
             onClick={themeChanger}
             size="md"
             color="warning"
