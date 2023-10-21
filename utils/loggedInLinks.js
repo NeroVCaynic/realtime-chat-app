@@ -7,8 +7,7 @@ export const ChatItems = [
 ];
 
 export const UserItems = [
-    {name: 'Profile', link: "/profile"},
-    {name: 'Dashboard', link: "/dashboard"},
+    {name: 'Profile', link: "/user"},
     {name: 'My Settings', link: "/settings"},
     {name: 'Terms of Service', link: "terms"},
 ];

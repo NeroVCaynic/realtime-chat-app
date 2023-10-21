@@ -39,7 +39,7 @@ function Nav({ isSession }) {
 
       <Navbar isBordered className="top-0 bg-neutral-100 dark:bg-neutral-800" position="sticky" onMenuOpenChange={setIsMenuStatus}>
         <NavbarBrand>
-          <Image className="relative left-5" src='./svg/logo.svg' alt="chat-logo" width={30} height={30}/>
+          <Image className="relative left-5" src='/svg/logo.svg' alt="chat-logo" width={30} height={30}/>
           <span className="text-base text-gray-700 dark:text-white font-bold">ReactUp</span>
         </NavbarBrand>
 
