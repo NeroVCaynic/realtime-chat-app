@@ -3,6 +3,7 @@ import { MoonIcon } from "./moonIcon"
 import { LockIcon } from "./lockIcon"
 import { MailIcon } from "./mailIcon"
 import { UserIcon } from "./userIcon"
+import { PhoneIcon } from "./phoneIcon"
 
 export {
     SunIcon,
@@ -10,4 +11,5 @@ export {
     LockIcon,
     MailIcon,
     UserIcon,
+    PhoneIcon,
 }
